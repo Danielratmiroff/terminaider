@@ -26,3 +26,4 @@ go.work.sum
 .aider*
 terminaider
 config.yaml
+__debug_bin*
