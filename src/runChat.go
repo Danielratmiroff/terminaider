@@ -8,6 +8,7 @@ import (
 
 	"github.com/Danielratmiroff/terminaider/api"
 	"github.com/Danielratmiroff/terminaider/prompts"
+	"github.com/charmbracelet/glamour"
 	"github.com/spf13/cobra"
 )
 
@@ -41,7 +42,14 @@ func RunChat(cmd *cobra.Command, args []string) {
 			continue
 		}
 
-		fmt.Println("Response:", response)
+		// Render the response as Markdown
+		out, err := glamour.Render(response, "dark")
+		if err != nil {
+			fmt.Printf("Error rendering Markdown: %v\n", err)
+			continue
+		}
+
+		fmt.Println(out)
 	}
 
 	if err := scanner.Err(); err != nil {
