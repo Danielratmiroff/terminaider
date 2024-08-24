@@ -16,13 +16,12 @@ type ConversationManager struct {
 }
 
 func NewConversationManager(cfg *config.Config) *ConversationManager {
-	apiKey := os.Getenv("GROQ_API_KEY")
-	if apiKey == "" {
-		fmt.Println("GROQ_API_KEY environment variable is not set")
+	if cfg.GroqAPIKey == "" {
+		fmt.Println("GROQ_API_KEY is not set in the config")
 		return nil
 	}
 
-	g := &api.Groq{ApiKey: apiKey}
+	g := &api.Groq{ApiKey: cfg.GroqAPIKey}
 
 	return &ConversationManager{
 		conversationHistory: make([]string, 0),
