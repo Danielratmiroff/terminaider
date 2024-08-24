@@ -17,7 +17,7 @@ func LoadConfig() (*Config, error) {
 	viper.AddConfigPath(".")
 	viper.AddConfigPath("$HOME/.terminaider")
 
-	viper.SetDefault("groq_api_key", "")
+	viper.SetDefault("GroqAPIKey", "")
 
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
@@ -30,7 +30,7 @@ func LoadConfig() (*Config, error) {
 
 	// Check for environment variable
 	if envAPIKey := os.Getenv("GROQ_API_KEY"); envAPIKey != "" {
-		viper.Set("groq_api_key", envAPIKey)
+		viper.Set("GroqAPIKey", envAPIKey)
 	}
 
 	var config Config

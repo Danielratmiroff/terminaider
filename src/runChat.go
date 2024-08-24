@@ -45,7 +45,6 @@ func RunChat(cfg *config.Config, initialPrompt string) {
 func handleUserInput(cm *ConversationManager, userInput string) {
 	prompt := cm.ComposePrompt(userInput)
 	cm.AddUserMessage(userInput)
-	fmt.Println(cm.GetConversationHistory())
 	response, err := cm.GetResponse(prompt)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
