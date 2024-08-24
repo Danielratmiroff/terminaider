@@ -13,13 +13,10 @@ import (
 )
 
 func RunChat(cfg *config.Config) {
-	apiKey := os.Getenv("GROQ_API_KEY")
-	if apiKey == "" {
-		fmt.Println("GROQ_API_KEY environment variable is not set")
+	cm := NewConversationManager(cfg)
+	if cm == nil {
 		return
 	}
-
-	g := &api.Groq{ApiKey: apiKey}
 
 	fmt.Println("Welcome to the AI Chat Interface!")
 	fmt.Println("Type 'exit' to quit.")
@@ -35,8 +32,9 @@ func RunChat(cfg *config.Config) {
 			break
 		}
 
-		prompt := prompts.DEFAULT_PROMPT + "\n" + userInput
-		response, err := g.ChatCompletion(prompt)
+		prompt := cm.ComposePrompt(userInput)
+		cm.AddToConversationHistory(userInput)
+		response, err := cm.GetResponse(prompt)
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
 			continue
