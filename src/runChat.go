@@ -6,9 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Danielratmiroff/terminaider/api"
 	"github.com/Danielratmiroff/terminaider/config"
-	"github.com/Danielratmiroff/terminaider/prompts"
 	"github.com/charmbracelet/glamour"
 )
 
