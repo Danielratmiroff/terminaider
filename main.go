@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/Danielratmiroff/terminaider/config"
 	"github.com/Danielratmiroff/terminaider/src"
@@ -10,7 +11,7 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "termi",
+	Use:   "termi [prompt]",
 	Short: "AI Chat Interface",
 	Long:  `An AI-powered chat interface using the Groq API.`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -19,7 +20,13 @@ var rootCmd = &cobra.Command{
 			fmt.Printf("Error loading config: %v\n", err)
 			os.Exit(1)
 		}
-		src.RunChat(cfg)
+
+		var initialPrompt string
+		if len(args) > 0 {
+			initialPrompt = strings.Join(args, " ")
+		}
+
+		src.RunChat(cfg, initialPrompt)
 	},
 }
 

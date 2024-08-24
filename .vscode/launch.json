@@ -13,7 +13,7 @@
             "env": {
                 "GROQ_API_KEY": "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"
             },
-            "args": []
+            "args": ["this is my test prompt"]
         }
     ]
 }

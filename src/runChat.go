@@ -10,7 +10,7 @@ import (
 	"github.com/charmbracelet/glamour"
 )
 
-func RunChat(cfg *config.Config) {
+func RunChat(cfg *config.Config, initialPrompt string) {
 	cm := NewConversationManager(cfg)
 	if cm == nil {
 		return
@@ -18,6 +18,10 @@ func RunChat(cfg *config.Config) {
 
 	fmt.Println("Welcome to the AI Chat Interface!")
 	fmt.Println("Type 'exit' to quit.")
+
+	if initialPrompt != "" {
+		handleUserInput(cm, initialPrompt)
+	}
 
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
@@ -30,25 +34,30 @@ func RunChat(cfg *config.Config) {
 			break
 		}
 
-		prompt := cm.ComposePrompt(userInput)
-		cm.AddToConversationHistory(userInput)
-		response, err := cm.GetResponse(prompt)
-		if err != nil {
-			fmt.Printf("Error: %v\n", err)
-			continue
-		}
-
-		// Render the response as Markdown
-		out, err := glamour.Render(response, "dark")
-		if err != nil {
-			fmt.Printf("Error rendering Markdown: %v\n", err)
-			continue
-		}
-
-		fmt.Println(out)
+		handleUserInput(cm, userInput)
 	}
 
 	if err := scanner.Err(); err != nil {
 		fmt.Printf("Error reading input: %v\n", err)
 	}
+}
+
+func handleUserInput(cm *ConversationManager, userInput string) {
+	prompt := cm.ComposePrompt(userInput)
+	cm.AddToConversationHistory(userInput)
+	fmt.Println(cm.conversationHistory)
+	response, err := cm.GetResponse(prompt)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+
+	// Render the response as Markdown
+	out, err := glamour.Render(response, "dark")
+	if err != nil {
+		fmt.Printf("Error rendering Markdown: %v\n", err)
+		return
+	}
+
+	fmt.Println(out)
 }
