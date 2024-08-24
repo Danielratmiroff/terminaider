@@ -7,12 +7,12 @@ import (
 	"strings"
 
 	"github.com/Danielratmiroff/terminaider/api"
+	"github.com/Danielratmiroff/terminaider/config"
 	"github.com/Danielratmiroff/terminaider/prompts"
 	"github.com/charmbracelet/glamour"
-	"github.com/spf13/cobra"
 )
 
-func RunChat(cmd *cobra.Command, args []string) {
+func RunChat(cfg *config.Config) {
 	apiKey := os.Getenv("GROQ_API_KEY")
 	if apiKey == "" {
 		fmt.Println("GROQ_API_KEY environment variable is not set")
