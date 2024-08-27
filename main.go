@@ -38,8 +38,7 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	// Register the --run flag
-	fmt.Println("Initializing flags...")
+	// Register flags
 	rootCmd.Flags().BoolP("run", "r", false, "Execute the prompt")
 }
 
