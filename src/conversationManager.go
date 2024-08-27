@@ -25,7 +25,6 @@ func NewConversationManager(cfg *config.Config) *ConversationManager {
 	g := &api.Groq{ApiKey: cfg.GroqAPIKey}
 
 	var prompt string
-	fmt.Println(cfg.PromptType)
 	if cfg.PromptType == prompts.EXECUTE {
 		prompt = prompts.DEFAULT_PROMPT + prompts.EXECUTE_PROMPT
 	} else {

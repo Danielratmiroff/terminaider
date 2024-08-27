@@ -72,7 +72,6 @@ func handleUserInput(cm *ConversationManager, userInput string) {
 }
 
 func handleUserInputAsExecutable(cm *ConversationManager, userInput string) {
-	fmt.Println("yow")
 	prompt := cm.ComposePrompt(userInput)
 	cm.AddUserMessage(userInput)
 	response, err := cm.GetResponse(prompt)

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"log"
 	"strings"
 
 	"github.com/Danielratmiroff/terminaider/config"
@@ -20,14 +20,12 @@ var rootCmd = &cobra.Command{
 		// Configure viper before loading it
 		if runFlag, _ := cmd.Flags().GetBool("run"); runFlag {
 			viper.Set("PromptType", prompts.EXECUTE)
-			fmt.Println("Executing with execute prompt...")
 		}
 
 		cfg, err := config.LoadConfig()
 
 		if err != nil {
-			fmt.Printf("Error loading config: %v\n", err)
-			os.Exit(1)
+			log.Fatalf("Error loading config: %v\n", err)
 		}
 
 		var initialPrompt string
@@ -47,7 +45,6 @@ func init() {
 
 func main() {
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 }
