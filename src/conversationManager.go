@@ -17,7 +17,6 @@ type ConversationManager struct {
 }
 
 func NewConversationManager(cfg *config.Config) *ConversationManager {
-	fmt.Println(cfg)
 	if cfg.GroqAPIKey == "" {
 		fmt.Println("GROQ_API_KEY is not set in the config")
 		return nil
@@ -25,10 +24,18 @@ func NewConversationManager(cfg *config.Config) *ConversationManager {
 
 	g := &api.Groq{ApiKey: cfg.GroqAPIKey}
 
+	var prompt string
+	fmt.Println(cfg.PromptType)
+	if cfg.PromptType == prompts.EXECUTE {
+		prompt = prompts.DEFAULT_PROMPT + prompts.EXECUTE_PROMPT
+	} else {
+		prompt = prompts.DEFAULT_PROMPT
+	}
+
 	return &ConversationManager{
 		userHistory:   make([]string, 0),
 		aiHistory:     make([]string, 0),
-		prompt:        prompts.DEFAULT_PROMPT,
+		prompt:        prompt,
 		g:             g,
 		windowHistory: 3,
 	}
@@ -60,7 +67,6 @@ func (cm *ConversationManager) ComposePrompt(userInput string) string {
 		}
 	}
 	combinedMessages += "User: " + userInput
-
 	return cm.prompt + "\n" + combinedMessages
 }
 

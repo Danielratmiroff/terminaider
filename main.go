@@ -6,8 +6,10 @@ import (
 	"strings"
 
 	"github.com/Danielratmiroff/terminaider/config"
+	"github.com/Danielratmiroff/terminaider/prompts"
 	"github.com/Danielratmiroff/terminaider/src"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var rootCmd = &cobra.Command{
@@ -15,7 +17,14 @@ var rootCmd = &cobra.Command{
 	Short: "AI Chat Interface",
 	Long:  `An AI-powered chat interface using the Groq API.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		// Configure viper before loading it
+		if runFlag, _ := cmd.Flags().GetBool("run"); runFlag {
+			viper.Set("PromptType", prompts.EXECUTE)
+			fmt.Println("Executing with execute prompt...")
+		}
+
 		cfg, err := config.LoadConfig()
+
 		if err != nil {
 			fmt.Printf("Error loading config: %v\n", err)
 			os.Exit(1)
@@ -28,6 +37,12 @@ var rootCmd = &cobra.Command{
 
 		src.RunChat(cfg, initialPrompt)
 	},
+}
+
+func init() {
+	// Register the --run flag
+	fmt.Println("Initializing flags...")
+	rootCmd.Flags().BoolP("run", "r", false, "Execute the prompt")
 }
 
 func main() {

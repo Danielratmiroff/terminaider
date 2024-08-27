@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/Danielratmiroff/terminaider/prompts"
 	"github.com/spf13/viper"
 )
 
 type Config struct {
 	GroqAPIKey string
+	PromptType string
 }
 
 func LoadConfig() (*Config, error) {
@@ -17,7 +19,9 @@ func LoadConfig() (*Config, error) {
 	viper.AddConfigPath(".")
 	viper.AddConfigPath("$HOME/.terminaider")
 
+	// set defaults
 	viper.SetDefault("GroqAPIKey", "")
+	viper.SetDefault("PromptType", prompts.DEFAULT)
 
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
