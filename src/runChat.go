@@ -41,7 +41,6 @@ func RunChat(cfg *config.Config, initialPrompt string) {
 			break
 		}
 
-		fmt.Println(cfg.PromptType)
 		if cfg.PromptType == prompts.DEFAULT {
 			handleUserInput(cm, userInput)
 		} else {
