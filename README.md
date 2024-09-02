@@ -58,6 +58,8 @@ terminaider How big is the Earth?
 terminaider -r How can I commit my changes to git?
 ```
 
+---
+
 ### Recommendation: Create an Alias
 
 Add this line to your shell configuration file (e.g., `~/.zshrc` or `~/.bashrc`):
