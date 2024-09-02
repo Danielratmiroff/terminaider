@@ -10,7 +10,7 @@ Quickly prompt any supported AI from within your terminal, without being bound t
 
 ### Features
 
-- Currently supports GROQ APIs
+- Currently supports ![GROQ APIs](https://groq.com/)
 - Prompt caching
 - Software engineering focus (for now)
 
