@@ -1,8 +1,8 @@
 # terminaider
 
-## Description
-
 AI within your terminal 🤖
+
+### Description
 
 Quickly prompt any supported AI from within your terminal, without being bound to any specific provider.
 
