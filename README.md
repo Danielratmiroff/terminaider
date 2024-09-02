@@ -2,7 +2,7 @@
 
 AI within your terminal 🤖
 
-### Description
+## Description
 
 Quickly prompt any supported AI from within your terminal, without being bound to any specific provider.
 
