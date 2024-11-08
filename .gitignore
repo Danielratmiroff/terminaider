@@ -28,3 +28,4 @@ terminaider
 config.yaml
 __debug_bin*
 termi*
+venv
