@@ -3,6 +3,7 @@ import re
 import logging
 from typing import Optional
 import uuid
+from themes.themes import CATPUCCINO_MOCCA
 from src.agent import call_model
 from src.ai_interface import get_ai_interface
 from src.prompts import PROMPT_TEMPLATE, SYSTEM_PROMPT
@@ -12,12 +13,20 @@ from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import MessagesState, StateGraph, START, END
+from rich.console import Console
+from rich.markdown import Markdown
+from rich.theme import Theme
+from rich.syntax import Syntax
+
+# Initialize the console with the custom theme
+console = Console(theme=CATPUCCINO_MOCCA, highlight=True)
 
 
 def run_chat(
         init_prompt: Optional[str],
         interface: str
 ):
+
     # Define a new graph
     builder = StateGraph(state_schema=MessagesState)
 
@@ -37,18 +46,30 @@ def run_chat(
     }
 
     try:
-        # print("** Welcome to the AI Chat Interface!")
-        system_message = SystemMessage(content="Welcome to the AI Chat Interface!")
+
+        # Initialize the chat with the system message
+        first_call = True
+        user_input = "push to git and add a markdown header title in your response"
 
         while True:
-            user_input = input("Enter your prompt: ")
+            # user_input = input("Enter your prompt: ")
             if user_input.lower() == "exit":
                 break
 
             input_message = HumanMessage(content=user_input)
 
-            for event in graph.stream({"messages": [input_message]}, config, stream_mode="values"):
-                event["messages"][-1].pretty_print()
+            if first_call:
+                messages = [SYSTEM_PROMPT, input_message]
+                first_call = False
+            else:
+                messages = [input_message]
+
+            # Stream the messages through the graph
+            for event in graph.stream({"messages": messages}, config, stream_mode="values"):
+                messages = event["messages"][-1]
+
+                markdown_messages = Markdown(messages.content)
+                console.print(markdown_messages)
 
     except Exception as e:
         print(f"Error reading input: {e}")

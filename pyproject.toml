@@ -18,7 +18,7 @@ keywords = ["terminal", "ai", "automation", "cli"]
 dependencies = ["appdirs>=1.4.4"]
 
 [project.scripts]
-gai = "gai.main:main"
+ai = "ai.main:main"
 
 [project.urls]
 "Homepage" = "https://github.com/Danielratmiroff/gai"

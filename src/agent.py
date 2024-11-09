@@ -12,7 +12,7 @@ from langchain_core.chat_history import InMemoryChatMessageHistory
 from langchain_core.runnables import RunnableConfig
 from langgraph.graph import START, MessagesState, StateGraph
 
-logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.INFO)
 
 
 chats_by_session_id = {}
@@ -34,7 +34,7 @@ def get_chat_history(session_id: str) -> InMemoryChatMessageHistory:
 
 
 # Define a new graph
-builder = StateGraph(state_schema=MessagesState)
+# builder = StateGraph(state_schema=MessagesState)
 
 # llm = get_ai_interface("huggingface")
 # llm = HuggingFaceEndpoint(
