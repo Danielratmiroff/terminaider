@@ -15,69 +15,68 @@ sapphire = "light_sky_blue1"  # ANSI Code 153
 blue = "sky_blue1"            # ANSI Code 117
 lavender = "medium_purple1"   # ANSI Code 141
 text = "bright_white"         # ANSI Code 15
-subtext1 = "light_slate_blue"  # ANSI Code 105
-subtext0 = "slate_blue3"      # ANSI Code 62
-overlay2 = "grey53"           # ANSI Code 102
-overlay1 = "purple4"          # ANSI Code 55
-overlay0 = "dark_blue"        # ANSI Code 18
-surface2 = "dark_blue"        # ANSI Code 18
-surface1 = "dark_slate_gray3"  # ANSI Code 116
-surface0 = "dark_slate_gray1"  # ANSI Code 123
-base = "black"                # ANSI Code 0
-mantle = "dark_slate_gray1"   # ANSI Code 123
-crust = "dark_slate_gray1"    # ANSI Code 123
+subtext1 = "grey11"  # ANSI Code 105
+subtext0 = "grey19"      # ANSI Code 62
+overlay2 = "grey27"           # ANSI Code 102
+overlay1 = "grey35"          # ANSI Code 55
+overlay0 = "grey39"        # ANSI Code 18
+surface2 = "grey46"        # ANSI Code 18
+surface1 = "grey54"  # ANSI Code 116
+surface0 = "grey62"  # ANSI Code 123
+base = "grey70"                # ANSI Code 0
+mantle = "grey85"   # ANSI Code 123
+crust = "grey93"    # ANSI Code 123
 
 CATPUCCINO_MOCCA = Theme({
     # Headings
-    "markdown.h1": f"bold {rosewater}",
-    "markdown.h2": f"bold {flamingo}",
-    "markdown.h3": f"bold {pink}",
-    "markdown.h4": f"bold {pink} dim",
-    "markdown.h5": f"underline {flamingo}",
-    "markdown.h6": f"italic {mauve}",
-    "markdown.h7": f"italic {mauve} dim",  # Optional
+    "markdown.h1": Style(bold=True, color=rosewater),
+    "markdown.h2": Style(bold=True, color=flamingo),
+    "markdown.h3": Style(bold=True, color=pink),
+    "markdown.h4": Style(bold=True, color=pink, dim=True),
+    "markdown.h5": Style(underline=True, color=flamingo),
+    "markdown.h6": Style(italic=True, color=mauve),
+    "markdown.h7": Style(italic=True, color=mauve, dim=True),  # Optional
 
     # Text Styles
-    "markdown.bold": f"bold {yellow}",
-    "markdown.italic": f"{mauve}",
-    "markdown.em": f"{mauve} italic",
-    "markdown.emph": f"{mauve} italic",  # For commonmark backwards compatibility
-    "markdown.strong": f"bold {yellow}",
-    "markdown.paragraph": f"{text}",
+    "markdown.bold": Style(bold=True, color=yellow),
+    "markdown.italic": Style(color=mauve),
+    "markdown.em": Style(italic=True, color=mauve),
+    "markdown.emph": Style(italic=True, color=mauve),  # For commonmark backwards compatibility
+    "markdown.strong": Style(bold=True, color=yellow),
+    "markdown.paragraph": Style(color=text),
 
     # Links
-    "markdown.link": f"underline {sapphire}",
-    "markdown.link_url": f"{sapphire}",
+    "markdown.link": Style(underline=True, color=sapphire),
+    "markdown.link_url": Style(color=sapphire),
 
     # Code
-    # "markdown.code": Style(bold=False, color=text, bgcolor=crust),
-    "markdown.code": f"{text}",
-    # "markdown.code_block": Style(bold=False, color=text, bgcolor=surface0),
-    "markdown.code_block": f"{text}",
+    "code": Style(color=text),
+    "markdown.code": Style(color=text),
+    "markdown.code_block": Style(color=text),
 
     # Blockquotes
-    "markdown.block_quote": f"{overlay1}",
-    "markdown.quote": f"{overlay1}",
+    "markdown.block_quote": Style(color=rosewater),
+    "markdown.quote": Style(color=rosewater),
 
     # Lists
-    "markdown.list": f"{teal}",
-    "markdown.item": f"{text}",
-    "markdown.item.bullet": f"bold {yellow}",
-    "markdown.item.number": f"bold {yellow}",
+    "markdown.list": Style(color=text),
+    "markdown.item": Style(color=text),
+    "markdown.item.bullet": Style(bold=True, color=text),
+    "markdown.item.number": Style(bold=True, color=text),
 
     # Horizontal Rules
-    "markdown.hr": f"{yellow}",
+    "markdown.hr": Style(color=peach),
 
     # Borders (Optional)
-    "markdown.h1.border": f"{rosewater}",
+    "markdown.h1.border": Style(color=rosewater),
 
     # Inline Elements
-    "markdown.inline": f"{subtext1}",
+    "markdown.inline": Style(color=subtext1),
 
     # Tables
-    "markdown.table": f"{teal}",
-    "markdown.table.header": f"{peach}",
+    "markdown.table": Style(color=teal),
+    "markdown.table.header": Style(color=peach),
 
     # Regular Text
-    "text": f"{text}",
+    "text": Style(color=text),
 })

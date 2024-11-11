@@ -6,7 +6,7 @@ import uuid
 from themes.themes import CATPUCCINO_MOCCA
 from src.agent import call_model
 from src.ai_interface import get_ai_interface
-from src.prompts import PROMPT_TEMPLATE, SYSTEM_PROMPT
+from src.prompts import SYSTEM_PROMPT
 import pyperclip
 import markdown
 from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
@@ -49,10 +49,9 @@ def run_chat(
 
         # Initialize the chat with the system message
         first_call = True
-        user_input = "push to git and add a markdown header title in your response"
 
         while True:
-            # user_input = input("Enter your prompt: ")
+            user_input = input("Enter your prompt: ")
             if user_input.lower() == "exit":
                 break
 
@@ -66,6 +65,7 @@ def run_chat(
 
             # Stream the messages through the graph
             for event in graph.stream({"messages": messages}, config, stream_mode="values"):
+                print(event["messages"])
                 messages = event["messages"][-1]
 
                 markdown_messages = Markdown(messages.content)
