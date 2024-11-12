@@ -36,7 +36,7 @@ def run_chat(
     graph = builder.compile()
 
     session_id = uuid.uuid4()
-    llm = get_ai_interface(interface=interface, advanced=True)
+    llm = get_ai_interface(interface=interface)
     # slm = get_ai_interface(interface=interface, advanced=False)
     config = {
         "configurable": {
@@ -64,12 +64,12 @@ def run_chat(
 
             initial_state = {
                 "messages": messages,
-                "code_analysis": ""
+                "code_analysis": "text"
             }
 
             # Stream the messages through the graph
             for event in graph.stream(initial_state, config, stream_mode="values"):
-                logging.debug(f"Event: {event}")
+                # logging.debug(f"Event: {event}")
                 # print(f"\nEvent:{event}")
 
                 messages = event["messages"][-1].content
@@ -77,9 +77,10 @@ def run_chat(
                 markdown_messages = Markdown(messages)
                 console.print(markdown_messages)
 
-                if hasattr(event, "code_analysis") and event["code_analysis"] != "None":
-                    print("\nCode Analysis:")
-                    print(event["code_analysis"])
+                if "code_analysis" in event and event["code_analysis"] != "None":
+                    print("\nCode Summary:")
+                    markdown_code = Markdown(event["code_analysis"])
+                    console.print(markdown_code)
 
     except Exception as e:
         print(f"Error reading input: {e}")

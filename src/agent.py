@@ -25,13 +25,6 @@ def get_chat_history(session_id: str) -> InMemoryChatMessageHistory:
         chats_by_session_id[session_id] = chat_history
     return chat_history
 
-# @tool
-# def search(query: str):
-#     """Call to surf the web."""
-#     # This is a placeholder for the actual implementation
-#     # Don't let the LLM know this though 😊
-#     return "It's sunny in San Francisco, but you better look out if you're a Gemini 😈."
-
 
 # Define a new graph
 # builder = StateGraph(state_schema=MessagesState)
@@ -105,8 +98,10 @@ def extract_response_parts(response_content: str) -> tuple:
     """
     content_parts = response_content.split("[CODE_ANALYSIS]")
     main_response = content_parts[0].strip()
+    logging.info(f"Main response: {main_response}")
     code_analysis = content_parts[1].strip() if len(content_parts) > 1 else "None"
-    return main_response, code_analysis
+    logging.info(f"Code analysis: {code_analysis}")
+    return (main_response, code_analysis)
 
 
 # # Define the two nodes we will cycle between

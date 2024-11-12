@@ -25,10 +25,10 @@ def termi(
     #     help="Execute the prompt"
     # ),
     interface: str = typer.Option(
-        "huggingface",
+        "groq",
         "-i",
         "--interface",
-        help="Interface to use for the AI chat",
+        help="Interface to use for the AI chat, e.g. groq, openai",
     ),
     version: bool = typer.Option(
         False,
