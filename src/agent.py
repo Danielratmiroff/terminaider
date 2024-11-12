@@ -1,5 +1,5 @@
 import logging
-from typing import Literal
+from typing import List, Literal, TypedDict
 import uuid
 
 from langchain_core.messages import BaseMessage, HumanMessage
@@ -51,9 +51,19 @@ def get_chat_history(session_id: str) -> InMemoryChatMessageHistory:
 # model = ChatHuggingFace(llm=llm)
 # bound_model = model.bind_tools(tools)
 
+class AnalysisResult(TypedDict):
+    messages: List[BaseMessage]
+    code_analysis: str
+
+
+class MessagesState(TypedDict):
+    messages: list[BaseMessage]
+    code_analysis: str
 
 # Define the function that calls the model
-def call_model(state: MessagesState, config: RunnableConfig) -> list[BaseMessage]:
+
+
+def call_model(state: MessagesState, config: RunnableConfig) -> AnalysisResult:
     # Make sure that config is populated with the session id
     logging.info(f"Config: {config}")
     if "configurable" not in config or "session_id" not in config["configurable"] or "llm_interface" not in config["configurable"]:
@@ -66,13 +76,38 @@ def call_model(state: MessagesState, config: RunnableConfig) -> list[BaseMessage
     llm = config["configurable"]["llm_interface"]
 
     messages = list(chat_history.messages) + state["messages"]
-    ai_message = llm.invoke(messages)
+    response = llm.invoke(messages)
 
-    # Finally, update the chat message history to include
-    # the new input message from the user together with the
-    # repsonse from the model.
+    main_response, code_analysis = extract_response_parts(response.content)
+
+    print(f"Main Response: {main_response}")
+    print(f"Code Analysis: {code_analysis}")
+    ai_message = type(response)(content=main_response)
+
+    # Update the chat message history to include
     chat_history.add_messages(state["messages"] + [ai_message])
-    return {"messages": ai_message}
+
+    return {
+        "messages": [ai_message],
+        "code_analysis": code_analysis
+    }
+    # return {"messages": ai_message}
+
+
+def extract_response_parts(response_content: str) -> tuple:
+    """
+    Helper function to split the response into main content and code analysis.
+
+    Parameters:
+    - response_content: The content of the response to be split.
+
+    Returns:
+    - A tuple containing the main response and code analysis.
+    """
+    content_parts = response_content.split("[CODE_ANALYSIS]")
+    main_response = content_parts[0].strip()
+    code_analysis = content_parts[1].strip() if len(content_parts) > 1 else "None"
+    return main_response, code_analysis
 
 
 # # Define the two nodes we will cycle between

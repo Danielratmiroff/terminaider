@@ -37,7 +37,8 @@ def run_chat(
     graph = builder.compile()
 
     session_id = uuid.uuid4()
-    llm = get_ai_interface(interface=interface)
+    llm = get_ai_interface(interface=interface, advanced=True)
+    # slm = get_ai_interface(interface=interface, advanced=False)
     config = {
         "configurable": {
             "session_id": session_id,
@@ -63,13 +64,29 @@ def run_chat(
             else:
                 messages = [input_message]
 
-            # Stream the messages through the graph
-            for event in graph.stream({"messages": messages}, config, stream_mode="values"):
-                print(event["messages"])
-                messages = event["messages"][-1]
+            initial_state = {
+                "messages": messages,
+                "code_analysis": ""
+            }
 
-                markdown_messages = Markdown(messages.content)
+            # Stream the messages through the graph
+            for event in graph.stream(initial_state, config, stream_mode="values"):
+                print(event["messages"])
+                messages = event["messages"][-1].content
+
+                markdown_messages = Markdown(messages)
                 console.print(markdown_messages)
+
+                if event["code_analysis"] != "None":
+                    print("\nCode Analysis:")
+                    print(event["code_analysis"])
+
+            # Use the function
+            # code_snippets = extract_code_blocks(messages)
+            # print(f"Extracted Code Snippets: {code_snippets}")
+            # code_analysis = [CODE_ANALYSIS, messages]
+            # is_code = llm.invoke(code_analysis)
+            # print(is_code)
 
     except Exception as e:
         print(f"Error reading input: {e}")

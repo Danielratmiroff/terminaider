@@ -17,25 +17,43 @@ class Interfaces(Enum):
     GROQ = "groq"
 
 
-class GroqModel(BaseModel):
-    name: str = "llama-3.2-90b-text-preview"
-    temperature: float = 0.7
-    max_tokens: int = 1024
+class AIModel(BaseModel):
+    llm: str
+    slm: str
+    temperature: float
+    max_tokens: int
 
 
-class HuggingFaceModel(BaseModel):
-    name: str = "Qwen/Qwen2.5-72B-Instruct"
-    temperature: float = 0.7
-    max_tokens: int = 32760
+groq_model = AIModel(
+    llm="llama-3.2-90b-text-preview",
+    slm="llama-3.2-3b-preview",
+    temperature=0.7,
+    max_tokens=5000
+)
+
+huggingface_model = AIModel(
+    llm="Qwen/Qwen2.5-72B-Instruct",
+    # slm="meta-llama/Llama-3.2-3B-Instruct",
+    slm="Qwen/Qwen2.5-7B-Instruct",
+    # meta-llama/Llama-3.2-3B-Instruct
+    temperature=0.7,
+    # max_tokens=32760
+    max_tokens=5000
+)
+
+openai_model = AIModel(
+    llm="gpt-4",
+    slm="gpt-4o-mini",
+    temperature=0.7,
+    # max_tokens=4096
+    max_tokens=5000
+)
 
 
-class OpenAIModel(BaseModel):
-    name: str = "gpt-4"
-    temperature: float = 0.7
-    max_tokens: int = 4096
-
-
-def get_ai_interface(interface: str):
+def get_ai_interface(
+        interface: str,
+        advanced: bool = True
+):
     """
     Get the interface to use for the AI chat.
     """
@@ -44,36 +62,40 @@ def get_ai_interface(interface: str):
     match interface:
         case Interfaces.OPENAI:
             api_key = get_openai_api_key()
-            model = OpenAIModel()
+            model = openai_model.llm if advanced else openai_model.slm
+            print(f"model: {model}")
 
             return ChatOpenAI(
-                model_name=model.name,
-                temperature=model.temperature,
+                model_name=model,
+                temperature=openai_model.temperature,
                 openai_api_key=api_key,
+                max_tokens=openai_model.max_tokens
             )
 
         case Interfaces.GROQ:
             api_key = get_groq_api_key()
-            model = GroqModel()
+            model = groq_model.llm if advanced else groq_model.slm
+            print(f"model: {model}")
 
             return ChatGroq(
-                model=model.name,
-                temperature=model.temperature,
-                max_tokens=model.max_tokens,
+                model=model,
+                temperature=groq_model.temperature,
+                max_tokens=groq_model.max_tokens,
                 api_key=api_key
             )
 
         case _:
             # Default to HuggingFace if no match is found
-            model = HuggingFaceModel()
             api_key = get_api_huggingface_key()
+            model = huggingface_model.llm if advanced else huggingface_model.slm
+            print(f"model: {model}")
 
             return ChatHuggingFace(
                 llm=HuggingFaceEndpoint(
-                    repo_id=model.name,
+                    repo_id=model,
                     task="text-generation",
-                    max_new_tokens=128,
-                    temperature=0.5,
+                    max_new_tokens=huggingface_model.max_tokens,
+                    temperature=huggingface_model.temperature,
                     huggingfacehub_api_token=api_key,
                     repetition_penalty=1.03,
                 )
