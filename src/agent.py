@@ -80,8 +80,7 @@ def call_model(state: MessagesState, config: RunnableConfig) -> AnalysisResult:
 
     main_response, code_analysis = extract_response_parts(response.content)
 
-    print(f"Main Response: {main_response}")
-    print(f"Code Analysis: {code_analysis}")
+    # Create a new message with the response content
     ai_message = type(response)(content=main_response)
 
     # Update the chat message history to include
@@ -91,7 +90,6 @@ def call_model(state: MessagesState, config: RunnableConfig) -> AnalysisResult:
         "messages": [ai_message],
         "code_analysis": code_analysis
     }
-    # return {"messages": ai_message}
 
 
 def extract_response_parts(response_content: str) -> tuple:

@@ -81,12 +81,5 @@ def run_chat(
                     print("\nCode Analysis:")
                     print(event["code_analysis"])
 
-            # Use the function
-            # code_snippets = extract_code_blocks(messages)
-            # print(f"Extracted Code Snippets: {code_snippets}")
-            # code_analysis = [CODE_ANALYSIS, messages]
-            # is_code = llm.invoke(code_analysis)
-            # print(is_code)
-
     except Exception as e:
         print(f"Error reading input: {e}")
