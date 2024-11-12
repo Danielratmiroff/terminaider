@@ -18,8 +18,6 @@ from rich.markdown import Markdown
 from rich.theme import Theme
 from rich.syntax import Syntax
 
-logging.basicConfig(level=logging.DEBUG)
-
 
 def run_chat(
         init_prompt: Optional[str],
@@ -72,6 +70,7 @@ def run_chat(
             # Stream the messages through the graph
             for event in graph.stream(initial_state, config, stream_mode="values"):
                 logging.debug(f"Event: {event}")
+                # print(f"\nEvent:{event}")
 
                 messages = event["messages"][-1].content
 

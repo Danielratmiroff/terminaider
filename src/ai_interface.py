@@ -19,31 +19,25 @@ class Interfaces(Enum):
 
 class AIModel(BaseModel):
     llm: str
-    slm: str
     temperature: float
     max_tokens: int
 
 
 groq_model = AIModel(
     llm="llama-3.2-90b-text-preview",
-    slm="llama-3.2-3b-preview",
     temperature=0.7,
     max_tokens=5000
 )
 
 huggingface_model = AIModel(
     llm="Qwen/Qwen2.5-72B-Instruct",
-    # slm="meta-llama/Llama-3.2-3B-Instruct",
-    slm="Qwen/Qwen2.5-7B-Instruct",
-    # meta-llama/Llama-3.2-3B-Instruct
-    temperature=0.7,
+    temperature=1,
     # max_tokens=32760
-    max_tokens=5000
+    max_tokens=2048
 )
 
 openai_model = AIModel(
     llm="gpt-4",
-    slm="gpt-4o-mini",
     temperature=0.7,
     # max_tokens=4096
     max_tokens=5000
@@ -57,7 +51,6 @@ def get_ai_interface(
     """
     Get the interface to use for the AI chat.
     """
-    logging.info(f"Using interface: {interface} {Interfaces.__members__}")
 
     match interface:
         case Interfaces.OPENAI:
@@ -96,4 +89,7 @@ def get_ai_interface(
                     huggingfacehub_api_token=api_key,
                     repetition_penalty=1.03,
                 )
-            )
+                # ChatHuggingFace discards the max_new_tokens parameter for invocations
+                # We need to pass it as a bind_tools parameter
+                # https://github.com/langchain-ai/langchain/issues/25219
+            ).bind_tools(tools=[], max_tokens=huggingface_model.max_tokens)

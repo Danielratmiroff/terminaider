@@ -5,6 +5,7 @@ from pydantic import BaseModel
 import typer
 from src import get_app_name, run_chat, get_package_version
 
+# logging.basicConfig(level=logging.DEBUG)
 
 app = typer.Typer()
 
