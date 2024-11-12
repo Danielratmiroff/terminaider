@@ -18,14 +18,15 @@ from rich.markdown import Markdown
 from rich.theme import Theme
 from rich.syntax import Syntax
 
-# Initialize the console with the custom theme
-console = Console(theme=CATPUCCINO_MOCCA, highlight=True)
+logging.basicConfig(level=logging.DEBUG)
 
 
 def run_chat(
         init_prompt: Optional[str],
         interface: str
 ):
+    # Initialize the console
+    console = Console(theme=CATPUCCINO_MOCCA, highlight=True)
 
     # Define a new graph
     builder = StateGraph(state_schema=MessagesState)
@@ -47,17 +48,16 @@ def run_chat(
     }
 
     try:
-
-        # Initialize the chat with the system message
         first_call = True
 
         while True:
-            user_input = input("Enter your prompt: ")
+            user_input = input("✨ Message AI:\n> ")
             if user_input.lower() == "exit":
                 break
 
             input_message = HumanMessage(content=user_input)
 
+            # Initialize the chat with the system message
             if first_call:
                 messages = [SYSTEM_PROMPT, input_message]
                 first_call = False
@@ -71,13 +71,14 @@ def run_chat(
 
             # Stream the messages through the graph
             for event in graph.stream(initial_state, config, stream_mode="values"):
-                print(event["messages"])
+                logging.debug(f"Event: {event}")
+
                 messages = event["messages"][-1].content
 
                 markdown_messages = Markdown(messages)
                 console.print(markdown_messages)
 
-                if event["code_analysis"] != "None":
+                if hasattr(event, "code_analysis") and event["code_analysis"] != "None":
                     print("\nCode Analysis:")
                     print(event["code_analysis"])
 

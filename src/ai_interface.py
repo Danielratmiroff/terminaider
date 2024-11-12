@@ -62,11 +62,10 @@ def get_ai_interface(
     match interface:
         case Interfaces.OPENAI:
             api_key = get_openai_api_key()
-            model = openai_model.llm if advanced else openai_model.slm
-            print(f"model: {model}")
+            logging.info(f"Using OpenAI Interface with API Key: {api_key}")
 
             return ChatOpenAI(
-                model_name=model,
+                model_name=openai_model.llm,
                 temperature=openai_model.temperature,
                 openai_api_key=api_key,
                 max_tokens=openai_model.max_tokens
@@ -74,11 +73,10 @@ def get_ai_interface(
 
         case Interfaces.GROQ:
             api_key = get_groq_api_key()
-            model = groq_model.llm if advanced else groq_model.slm
-            print(f"model: {model}")
+            logging.info(f"Using GROQ Interface with API Key: {api_key}")
 
             return ChatGroq(
-                model=model,
+                model=groq_model.llm,
                 temperature=groq_model.temperature,
                 max_tokens=groq_model.max_tokens,
                 api_key=api_key
@@ -87,12 +85,11 @@ def get_ai_interface(
         case _:
             # Default to HuggingFace if no match is found
             api_key = get_api_huggingface_key()
-            model = huggingface_model.llm if advanced else huggingface_model.slm
-            print(f"model: {model}")
+            logging.info(f"Using HuggingFace Interface with API Key: {api_key}")
 
             return ChatHuggingFace(
                 llm=HuggingFaceEndpoint(
-                    repo_id=model,
+                    repo_id=huggingface_model.llm,
                     task="text-generation",
                     max_new_tokens=huggingface_model.max_tokens,
                     temperature=huggingface_model.temperature,
