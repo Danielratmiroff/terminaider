@@ -77,28 +77,36 @@ def run_chat(
     try:
         while True:
             if init_prompt and is_first_call:
-                chat_state = initialize_chat(is_first_call, HumanMessage(content=init_prompt))
+                input_message = HumanMessage(content=init_prompt)
+                chat_state = initialize_chat(is_first_call, input_message)
 
             else:
                 user_input = input("✨ Message AI:\n> ")
                 if user_input.lower() == "exit":
+                    console.print("Exiting... auf Wiedersehen! 👋")
                     break
-                chat_state = initialize_chat(is_first_call, HumanMessage(content=user_input))
+
+                input_message = HumanMessage(content=user_input)
+                chat_state = initialize_chat(is_first_call, input_message)
 
             # Stream the messages through the graph
             for event in graph.stream(chat_state, config, stream_mode="values"):
+                # Skip the first event
                 if is_first_call:
                     is_first_call = False
-                else:
-                    logging.debug(f"Stream Event: {event}")
+                    continue
 
-                    messages = event["messages"][-1].content
+                logging.debug(f"Stream Event: {event}")
 
-                    markdown_messages = Markdown(messages)
-                    console.print(markdown_messages)
+                messages = event["messages"][-1].content
+                markdown_messages = Markdown(messages)
+                console.print(markdown_messages)
 
-                    if "code_analysis" in event and event["code_analysis"] != "None":
-                        handle_code_summary(event["code_analysis"], console)
+                code_analysis = event.get("code_analysis")
+                if code_analysis and event["code_analysis"] != "None":
+                    handle_code_summary(event["code_analysis"], console)
 
+    except KeyboardInterrupt:
+        console.print("\nTschuss! 👋")
     except Exception as e:
         print(f"Error reading input: {e}")
