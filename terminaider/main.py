@@ -5,8 +5,9 @@ from pydantic import BaseModel
 import typer
 from terminaider import get_app_name, run_chat, get_package_version
 from terminaider.ai_interface import Interfaces
+from terminaider.config import ConfigManager
 
-# logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG)
 
 app = typer.Typer()
 
@@ -48,16 +49,21 @@ def termi(
     - run: A boolean flag to execute the prompt if set to True.
     - version: A boolean flag to display the current version of the application if set to True.
     """
+    configManager = ConfigManager(get_app_name())
+
     logging.debug(f"Parameters: prompt={prompt}, interface={interface}, version={version}")
+
+    if interface and configManager.get_config('interface') != interface:
+        configManager.update_config('interface', interface.value)
 
     if version:
         print(f"v{get_package_version(get_app_name())}")
         raise typer.Exit()
 
-    run_chat(
-        init_prompt=prompt,
-        interface=interface
-    )
+    # run_chat(
+    #     init_prompt=prompt,
+    #     interface=interface
+    # )
 
 
 def run():

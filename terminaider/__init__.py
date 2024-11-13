@@ -1,4 +1,4 @@
-from .config import ConfigManager, get_app_name, GROQ_MODELS, HUGGING_FACE_MODELS, DEFAULT_CONFIG
+from .config import ConfigManager, get_app_name
 from .run_chat import run_chat
 from .ai_interface import Interfaces, get_ai_interface
 from .prompts import SYSTEM_PROMPT
