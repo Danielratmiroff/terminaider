@@ -1,4 +1,3 @@
-# terminaider
 
 [![PyPI version](https://badge.fury.io/py/terminaider.svg)](https://badge.fury.io/py/terminaider)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -7,7 +6,7 @@
 
 Terminaider is a CLI that brings AI-powered assistance directly to your terminal. 
 
-Interact with an AI chat interface to get instant help, code analysis, and more—all without leaving your command line.
+Interact with an AI chat interface to get instant help, code analysis, and more — all without leaving your command line.
 
 ![Demo](resources/terminaider_demo.gif)
 
@@ -56,12 +55,6 @@ export GROQ_API_KEY='your_groq_api_key'
 export OPENAI_API_KEY='your_openai_api_key'
 ```
 
->You can specify the AI interface using the `--interface` or `-i` option.
->
->PD: Interface selection will be stored as default for future use. So you don't need to specify it everytime_
->
->Configuration file is located at `~/.config/terminaider/config.yaml`. 
-
 ## 📖 Usage
 
 ### 🗨️ Chat with the AI Assistant
@@ -83,13 +76,18 @@ ai "explain the why Python is great"
 - `--interface`, `-i`: Specify the AI interface to use (e.g., `groq` or `openai`).
 - `--version`, `-v`: Display the current version of Terminaider.
 
+>PD: Interface selection will be stored as default for future use. So you don't need to specify it everytime_
+>
+>Configuration file is located at `~/.config/terminaider/config.yaml`. 
+
+
 ### 🔍 Code Analysis
 
-After discussing code with the AI, any provided code analysis will be displayed and copied to your clipboard for easy access.
+The AI will provide code analysis when necessary and automatically copy them to your clipboard for easy access.
 
 ## 🛠 Build Instructions
 
-Build Terminaider from source:
+Build from source:
 
 ### Clone the Repository
 
@@ -113,13 +111,14 @@ source venv/bin/activate  # On Windows use venv\Scripts\activate
 ### Install Dependencies
 
 ```bash
+pip install build
 pip install -r requirements.txt
 ```
 
 ### Build the Package
 
 ```bash
-python setup.py sdist bdist_wheel
+python -m build
 ```
 
 This will generate distribution files in the `dist/` directory.
