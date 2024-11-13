@@ -3,8 +3,8 @@ import logging
 from typing import Annotated, List, Optional
 from pydantic import BaseModel
 import typer
-from terminaider.src import get_app_name, run_chat, get_package_version
-from terminaider.src.ai_interface import Interfaces
+from terminaider import get_app_name, run_chat, get_package_version
+from terminaider.ai_interface import Interfaces
 
 logging.basicConfig(level=logging.DEBUG)
 
