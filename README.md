@@ -2,7 +2,7 @@
 [![PyPI version](https://badge.fury.io/py/terminaider.svg)](https://badge.fury.io/py/terminaider)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-# Terminaider: Your AI Assistant for the Terminal 🚀
+# Your AI Assistant for the Terminal 🚀
 
 Terminaider is a CLI that brings AI-powered assistance directly to your terminal. 
 
