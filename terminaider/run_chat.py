@@ -7,7 +7,7 @@ import uuid
 from terminaider.themes.themes import CATPUCCINO_MOCCA
 from terminaider.agent import call_model
 from terminaider.ai_interface import get_ai_interface
-from terminaider.utils import clean_code_block
+from terminaider.utils import clean_code_block, print_token_usage
 from terminaider.prompts import SYSTEM_PROMPT
 import pyperclip
 import markdown
@@ -19,6 +19,8 @@ from rich.console import Console
 from rich.markdown import Markdown
 from rich.theme import Theme
 from rich.syntax import Syntax
+
+# logging.basicConfig(level=logging.DEBUG)
 
 
 def initialize_chat(first_call: bool, input_message: HumanMessage) -> MessagesState:
@@ -98,8 +100,9 @@ def run_chat(
 
                 logging.debug(f"Stream Event: {event}")
 
-                messages = event["messages"][-1].content
-                markdown_messages = Markdown(messages)
+                latest_message = event["messages"][-1]
+                messages_context = latest_message.content
+                markdown_messages = Markdown(messages_context)
                 console.print(markdown_messages)
 
                 code_analysis = event.get("code_analysis")

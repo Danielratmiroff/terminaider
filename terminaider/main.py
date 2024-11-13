@@ -6,7 +6,6 @@ import typer
 from terminaider import get_app_name, run_chat, get_package_version
 from terminaider.ai_interface import Interfaces
 
-# logging.basicConfig(level=logging.DEBUG)
 
 app = typer.Typer()
 

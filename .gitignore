@@ -157,3 +157,5 @@ htmlcov/
 .coverage
 coverage.xml
 .aider*
+
+*.pyc
