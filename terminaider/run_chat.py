@@ -47,7 +47,7 @@ def handle_code_summary(code_summary: str, console: Console) -> None:
     # Copy the code analysis to the clipboard
     logging.debug(f"\nCopying code analysis to clipboard.\n{clean_code_block(code_summary)}")
     pyperclip.copy(clean_code_block(code_summary))
-    print("Code analysis copied to clipboard. ✅")
+    print("Code summary copied to clipboard. ✅")
 
 
 def initialize_state_graph():
@@ -90,7 +90,7 @@ def run_chat(
                 chat_state = initialize_chat(is_first_call, input_message)
 
             else:
-                user_input = input("✨ Message AI:\n> ")
+                user_input = input("\n✨ Message AI:\n> ")
                 if user_input.lower() == "exit":
                     print_token_usage(total_token_usage, console=console)
                     console.print("Exiting... auf Wiedersehen! 👋")

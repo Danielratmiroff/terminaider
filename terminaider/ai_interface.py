@@ -1,16 +1,15 @@
-from langchain.agents import initialize_agent, Tool, AgentType
-from enum import Enum
-from langchain_core.tools import tool
-import logging
-from typing import Dict, Literal
-from langchain_groq import ChatGroq
-from langchain_huggingface import HuggingFaceEndpoint, ChatHuggingFace
-import os
-from langchain_openai import ChatOpenAI
-from langchain.prompts import PromptTemplate
-from pydantic import BaseModel
-
 from terminaider.utils import get_api_huggingface_key, get_groq_api_key, get_openai_api_key
+from pydantic import BaseModel
+from langchain.prompts import PromptTemplate
+from langchain_openai import ChatOpenAI
+import os
+from langchain_huggingface import HuggingFaceEndpoint, ChatHuggingFace
+from langchain_groq import ChatGroq
+from typing import Dict, Literal
+import logging
+from langchain_core.tools import tool
+from enum import Enum
+from colorama import Fore, Style
 
 
 class Interfaces(str, Enum):
@@ -56,7 +55,7 @@ def get_ai_interface(
     match interface:
         case Interfaces.OPENAI:
             api_key = get_openai_api_key()
-            print(f"Using OpenAI Interface")
+            print(f"{Fore.LIGHTMAGENTA_EXb}Using OpenAI Interface{Style.RESET_ALL}\n")
 
             return ChatOpenAI(
                 model_name=openai_model.llm,
@@ -67,7 +66,7 @@ def get_ai_interface(
 
         case _:
             api_key = get_groq_api_key()
-            print(f"Using Groq Interface")
+            print(f"{Fore.LIGHTRED_EX}Using Groq Interface{Style.RESET_ALL}\n")
 
             return ChatGroq(
                 model=groq_model.llm,

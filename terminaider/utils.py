@@ -71,9 +71,9 @@ def print_token_usage(metadata: Optional[UsageMetadata], console: Console) -> No
 
     if input_tokens is not None and output_tokens is not None and total_tokens is not None:
         console.print("\n🤖 [bold violet]Token usage:[/bold violet]")
-        console.print(f"├─ [green]Input:{input_tokens}[/green] ")
-        console.print(f"├─ [blue]Output:{output_tokens}[/blue] ")
-        console.print(f"└─ [magenta]Total:{total_tokens} tokens[/magenta]\n")
+        console.print(f"├─ [green]Input: {input_tokens}[/green] ")
+        console.print(f"├─ [blue]Output: {output_tokens}[/blue] ")
+        console.print(f"└─ [magenta]Total: {total_tokens} tokens[/magenta]\n")
     else:
         console.print("\nIncomplete token usage information.\n", style="bold yellow")
 
