@@ -72,7 +72,7 @@ def call_model(state: MessagesState, config: RunnableConfig) -> AnalysisResult:
 
     messages = list(chat_history.messages) + state["messages"]
     response = llm.invoke(messages)
-    print(f"\nResponse {response}")
+    logging.info(f"\nAI Response: {response}")
 
     main_response, code_analysis = extract_response_parts(response.content)
 

@@ -6,7 +6,7 @@ import typer
 from terminaider import get_app_name, run_chat, get_package_version
 from terminaider.ai_interface import Interfaces
 
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 
 app = typer.Typer()
 
@@ -24,8 +24,7 @@ def interface_callback(value: str) -> Interfaces:
 def termi(
     prompt: Annotated[Optional[str],
                       typer.Argument(
-                          help="The prompt to be processed by the AI chat."
-    )] = None,
+                          help="The prompt to be processed by the AI chat.")] = None,
     interface: Annotated[str,
                          typer.Option(
                              "--interface",

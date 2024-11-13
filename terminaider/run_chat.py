@@ -33,11 +33,23 @@ def initialize_chat(first_call: bool, input_message: HumanMessage) -> MessagesSt
     )
 
 
+def handle_code_summary(code_summary: str, console: Console) -> None:
+    """
+    Display and copy the code analysis summary.
+    """
+    console.print(Markdown("\n## Code Summary:"))
+    console.print(Markdown(code_summary))
+
+    # Copy the code analysis to the clipboard
+    logging.debug(f"\nCopying code analysis to clipboard.\n{clean_code_block(code_summary)}")
+    pyperclip.copy(clean_code_block(code_summary))
+    print("Code analysis copied to clipboard. ✅")
+
+
 def run_chat(
         init_prompt: Optional[str],
         interface: str
 ):
-    # Initialize the console
     console = Console(theme=CATPUCCINO_MOCCA, highlight=True)
     is_first_call = True
 
@@ -48,11 +60,13 @@ def run_chat(
     builder.add_edge(START, "model")
     builder.add_node("model", call_model)
 
+    # Compile the graph
     graph = builder.compile()
 
     session_id = uuid.uuid4()
+
     llm = get_ai_interface(interface=interface)
-    # slm = get_ai_interface(interface=interface, advanced=False)
+
     config = {
         "configurable": {
             "session_id": session_id,
@@ -61,36 +75,30 @@ def run_chat(
     }
 
     try:
-
         while True:
-            user_input = input("✨ Message AI:\n> ")
-            if user_input.lower() == "exit":
-                break
+            if init_prompt and is_first_call:
+                chat_state = initialize_chat(is_first_call, HumanMessage(content=init_prompt))
 
-            input_message = HumanMessage(content=user_input)
-
-            chat_state = initialize_chat(is_first_call, input_message)
+            else:
+                user_input = input("✨ Message AI:\n> ")
+                if user_input.lower() == "exit":
+                    break
+                chat_state = initialize_chat(is_first_call, HumanMessage(content=user_input))
 
             # Stream the messages through the graph
             for event in graph.stream(chat_state, config, stream_mode="values"):
-                # logging.debug(f"Event: {event}")
-                # print(f"\nEvent:{event}")
+                if is_first_call:
+                    is_first_call = False
+                else:
+                    logging.debug(f"Stream Event: {event}")
 
-                messages = event["messages"][-1].content
+                    messages = event["messages"][-1].content
 
-                markdown_messages = Markdown(messages)
-                console.print(markdown_messages)
+                    markdown_messages = Markdown(messages)
+                    console.print(markdown_messages)
 
-                if "code_analysis" in event and event["code_analysis"] != "None":
-                    code_summary = event["code_analysis"]
-                    print("\nCode Summary:")
-                    markdown_code = Markdown(code_summary)
-                    console.print(markdown_code)
-
-                    # Copy the code analysis to the clipboard
-                    logging.info(f"Copying code analysis to clipboard.\n{clean_code_block(code_summary)}")
-                    pyperclip.copy(clean_code_block(code_summary))
-                    print("Code analysis copied to clipboard. ✅")
+                    if "code_analysis" in event and event["code_analysis"] != "None":
+                        handle_code_summary(event["code_analysis"], console)
 
     except Exception as e:
         print(f"Error reading input: {e}")
