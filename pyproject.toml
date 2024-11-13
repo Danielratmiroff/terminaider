@@ -18,7 +18,7 @@ keywords = ["terminal", "ai", "automation", "cli"]
 dependencies = ["appdirs>=1.4.4"]
 
 [project.scripts]
-ai = "ai.main:main"
+ai = "terminaider.main:run"
 
 [project.urls]
 "Homepage" = "https://github.com/Danielratmiroff/gai"
@@ -28,5 +28,5 @@ ai = "ai.main:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["gai*"]
+include = ["terminaider*"]
 exclude = ["tests*"]
