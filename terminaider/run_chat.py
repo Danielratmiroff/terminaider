@@ -7,7 +7,7 @@ import uuid
 from terminaider.themes.themes import CATPUCCINO_MOCCA
 from terminaider.agent import call_model
 from terminaider.ai_interface import get_ai_interface
-from terminaider.utils import clean_code_block, print_token_usage
+from terminaider.utils import clean_code_block
 from terminaider.prompts import SYSTEM_PROMPT
 import pyperclip
 import markdown
@@ -19,8 +19,6 @@ from rich.console import Console
 from rich.markdown import Markdown
 from rich.theme import Theme
 from rich.syntax import Syntax
-
-# logging.basicConfig(level=logging.DEBUG)
 
 
 def initialize_chat(first_call: bool, input_message: HumanMessage) -> MessagesState:

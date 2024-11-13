@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from rich.console import Console
 import logging
 from typing import List, Literal, TypedDict
 import uuid
