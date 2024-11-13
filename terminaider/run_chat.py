@@ -4,7 +4,7 @@ from rich.markdown import Markdown
 from rich.console import Console
 from langgraph.graph import MessagesState, StateGraph, START, END
 from langgraph.checkpoint.memory import MemorySaver
-from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
 import markdown
 import pyperclip
@@ -99,30 +99,29 @@ def run_chat(
                 input_message = HumanMessage(content=user_input)
                 chat_state = initialize_chat(is_first_call, input_message)
 
+            is_first_call = False
+
             # Stream the messages through the graph
             for event in state_graph.stream(chat_state, config, stream_mode="values"):
-                # Skip the first event
-                if is_first_call:
-                    is_first_call = False
-                    continue
-
-                print(f"event: {event}")
                 logging.debug(f"Stream Event: {event}")
+                # print(f"event: {event}")
 
                 latest_message = event["messages"][-1]
-                messages_context = latest_message.content
-                markdown_messages = Markdown(messages_context)
-                console.print(markdown_messages)
 
-                # Handle the code analysis summary
-                code_analysis = event.get("code_analysis")
-                if code_analysis and event["code_analysis"] != "None":
-                    handle_code_summary(event["code_analysis"], console)
+                # Only process AI messages
+                if isinstance(latest_message, AIMessage):
+                    # Display AI message content
+                    console.print(Markdown(latest_message.content))
 
-                # Update the token usage
-                current_token_usage = event.get("usage_metadata")
-                if current_token_usage:
-                    total_token_usage = sum_tokens(total_token_usage, current_token_usage)
+                    # Process code analysis summary if available
+                    code_analysis = event.get("code_analysis")
+                    if code_analysis and code_analysis != "None":
+                        handle_code_summary(code_analysis, console)
+
+                    # Update total token usage
+                    current_token_usage = event.get("usage_metadata")
+                    if current_token_usage:
+                        total_token_usage = sum_tokens(total_token_usage, current_token_usage)
 
     except KeyboardInterrupt:
         print_token_usage(total_token_usage, console=console)

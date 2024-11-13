@@ -94,7 +94,6 @@ def extract_response_parts(response) -> tuple:
     # Extract the main response
     main_response = content_parts[0].strip()
     logging.info(f"Main response: {main_response}")
-    print(f"Main response: {main_response}")
 
     # Extract the code analysis if it exists
     code_analysis = content_parts[1].strip() if len(content_parts) > 1 else "None"
