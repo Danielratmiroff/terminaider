@@ -1,6 +1,10 @@
 from importlib.metadata import version, PackageNotFoundError
+from rich.console import Console
 import os
 import re
+from typing import Optional
+
+from terminaider.agent import UsageMetadata
 
 
 def get_package_version(package_name: str) -> str:
@@ -38,10 +42,52 @@ def get_groq_api_key() -> str:
 
 
 def clean_code_block(input_string: str) -> str:
-    # Remove the surrounding code block markers
+    """
+    Cleans a code block string by removing surrounding code block markers and 
+    any leading or trailing whitespace.
+
+    Args:
+        input_string (str): The string containing the code block to be cleaned.
+    """
     cleaned_string = re.sub(r'```\w*\n|\n```', '', input_string)
-
-    # Remove any leading/trailing whitespace
     cleaned_string = cleaned_string.strip()
-
     return cleaned_string
+
+
+def print_token_usage(metadata: Optional[UsageMetadata], console: Console) -> None:
+    """
+    Print the token usage from the response metadata.
+
+    Args:
+        metadata (dict): The response metadata containing token usage information.
+    """
+    if not metadata:
+        console.print("\nNo token usage information available.\n", style="bold yellow")
+        return
+
+    input_tokens = metadata.input_tokens
+    output_tokens = metadata.output_tokens
+    total_tokens = metadata.total_tokens
+
+    if input_tokens is not None and output_tokens is not None and total_tokens is not None:
+        console.print("\n🤖 [bold violet]Token usage:[/bold violet]")
+        console.print(f"├─ [green]Input:{input_tokens}[/green] ")
+        console.print(f"├─ [blue]Output:{output_tokens}[/blue] ")
+        console.print(f"└─ [magenta]Total:{total_tokens} tokens[/magenta]\n")
+    else:
+        console.print("\nIncomplete token usage information.\n", style="bold yellow")
+
+
+def sum_tokens(current_usage: UsageMetadata, metadata: UsageMetadata) -> UsageMetadata:
+    """
+    Sum the total number of tokens used in the response metadata.
+
+    Args:
+        current_usage (dict): The current token usage.
+        metadata (dict): The response metadata containing token usage information.
+    """
+    return UsageMetadata(
+        input_tokens=current_usage.input_tokens + metadata.input_tokens,
+        output_tokens=current_usage.output_tokens + metadata.output_tokens,
+        total_tokens=current_usage.total_tokens + metadata.total_tokens
+    )

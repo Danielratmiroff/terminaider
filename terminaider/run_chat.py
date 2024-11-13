@@ -1,24 +1,24 @@
-import sys
-import pyperclip
-import re
-import logging
-from typing import Callable, List, Optional, Tuple
-import uuid
-from terminaider.themes.themes import CATPUCCINO_MOCCA
-from terminaider.agent import UsageMetadata, call_model
-from terminaider.ai_interface import get_ai_interface
-from terminaider.utils import clean_code_block
-from terminaider.prompts import SYSTEM_PROMPT
-import pyperclip
-import markdown
-from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
-from langchain_core.messages import HumanMessage, SystemMessage
-from langgraph.checkpoint.memory import MemorySaver
-from langgraph.graph import MessagesState, StateGraph, START, END
-from rich.console import Console
-from rich.markdown import Markdown
-from rich.theme import Theme
 from rich.syntax import Syntax
+from rich.theme import Theme
+from rich.markdown import Markdown
+from rich.console import Console
+from langgraph.graph import MessagesState, StateGraph, START, END
+from langgraph.checkpoint.memory import MemorySaver
+from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
+import markdown
+import pyperclip
+from terminaider.prompts import SYSTEM_PROMPT
+from terminaider.utils import clean_code_block, print_token_usage, sum_tokens
+from terminaider.ai_interface import get_ai_interface
+from terminaider.agent import UsageMetadata, call_model
+from terminaider.themes.themes import CATPUCCINO_MOCCA
+import uuid
+from typing import Callable, List, Optional, Tuple
+import logging
+import re
+import sys
+pyperclip
 
 
 def initialize_chat(first_call: bool, input_message: HumanMessage) -> MessagesState:
@@ -50,13 +50,7 @@ def handle_code_summary(code_summary: str, console: Console) -> None:
     print("Code analysis copied to clipboard. ✅")
 
 
-def run_chat(
-        init_prompt: Optional[str],
-        interface: str
-):
-    console = Console(theme=CATPUCCINO_MOCCA, highlight=True)
-    is_first_call = True
-
+def initialize_state_graph():
     # Define a new graph
     builder = StateGraph(state_schema=MessagesState)
 
@@ -67,8 +61,19 @@ def run_chat(
     # Compile the graph
     graph = builder.compile()
 
+    return graph
+
+
+def run_chat(
+        init_prompt: Optional[str],
+        interface: str
+):
+    total_token_usage = UsageMetadata(input_tokens=0, output_tokens=0, total_tokens=0)
+    console = Console(theme=CATPUCCINO_MOCCA, highlight=True)
+    is_first_call = True
     session_id = uuid.uuid4()
 
+    state_graph = initialize_state_graph()
     llm = get_ai_interface(interface=interface)
 
     config = {
@@ -87,6 +92,7 @@ def run_chat(
             else:
                 user_input = input("✨ Message AI:\n> ")
                 if user_input.lower() == "exit":
+                    print_token_usage(total_token_usage, console=console)
                     console.print("Exiting... auf Wiedersehen! 👋")
                     break
 
@@ -94,7 +100,7 @@ def run_chat(
                 chat_state = initialize_chat(is_first_call, input_message)
 
             # Stream the messages through the graph
-            for event in graph.stream(chat_state, config, stream_mode="values"):
+            for event in state_graph.stream(chat_state, config, stream_mode="values"):
                 # Skip the first event
                 if is_first_call:
                     is_first_call = False
@@ -108,13 +114,18 @@ def run_chat(
                 markdown_messages = Markdown(messages_context)
                 console.print(markdown_messages)
 
-                # print(event["usage_metadata"])
-
+                # Handle the code analysis summary
                 code_analysis = event.get("code_analysis")
                 if code_analysis and event["code_analysis"] != "None":
                     handle_code_summary(event["code_analysis"], console)
 
+                # Update the token usage
+                current_token_usage = event.get("usage_metadata")
+                if current_token_usage:
+                    total_token_usage = sum_tokens(total_token_usage, current_token_usage)
+
     except KeyboardInterrupt:
+        print_token_usage(total_token_usage, console=console)
         console.print("\nTschuss! 👋")
     except Exception as e:
         print(f"Error reading input: {e}")
