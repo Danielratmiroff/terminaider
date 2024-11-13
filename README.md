@@ -1,85 +1,139 @@
 # terminaider
 
-AI within your terminal 🤖
+[![PyPI version](https://badge.fury.io/py/terminaider.svg)](https://badge.fury.io/py/terminaider)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Description
+# Terminaider: Your AI Assistant for the Terminal 🚀
 
-Quickly prompt any supported AI from within your terminal, without being bound to any specific provider.
+Terminaider is a CLI that brings AI-powered assistance directly to your terminal. 
 
-![terminaider demo](https://github.com/user-attachments/assets/14906c21-fb8c-41a5-8c7c-947f4dcceb55)
+Interact with an AI chat interface to get instant help, code analysis, and more—all without leaving your command line.
 
-### Features
+![Demo](resources/terminaider_demo.gif)
 
-- Currently supports [GROQ APIs](https://groq.com/)
-- Prompt caching
-- Software engineering focus (for now)
+## ✨ Features
 
-## Installation
+- **AI Chat Interface**: Engage in conversations with an AI assistant directly from your terminal.
+- **Code Analysis**: Receive code summaries and analyses to understand and improve your code.
+- **Customizable Interfaces**: Choose between different AI interfaces like Groq or OpenAI.
+- **Session Management**: Maintains chat history per session for a seamless experience.
+- **Clipboard Integration**: Copy code summaries directly to your clipboard.
 
-1. Ensure you have [Go installed](https://go.dev/doc/install) on your system.
+## 📦 Installation
 
-2. Clone the repository and install:
+Install Terminaider via pip:
+
+```bash
+pip install terminaider
+
+# Recommended:
+pipx install terminaider
+```
+
+## 🚀 Getting Started
+
+Start using Terminaider by simply typing:
+
+```bash
+ai
+```
+
+Or initiate a chat with an initial prompt:
+
+```bash
+ai "How do I calculate Earth's roundness"
+```
+
+## ⚙️ Configuration
+
+Set your API tokens as environment variables:
+
+```bash
+# If you want to use Groq's API
+export GROQ_API_KEY='your_groq_api_key'
+
+# If you want to use OpenAI's API
+export OPENAI_API_KEY='your_openai_api_key'
+```
+
+>You can specify the AI interface using the `--interface` or `-i` option.
+>
+>PD: Interface selection will be stored as default for future use. So you don't need to specify it everytime_
+>
+>Configuration file is located at `~/.config/terminaider/config.yaml`. 
+
+## 📖 Usage
+
+### 🗨️ Chat with the AI Assistant
+
+Start an interactive session:
+
+```bash
+ai
+```
+
+Provide an initial prompt:
+
+```bash
+ai "explain the why Python is great"
+```
+
+### ⚙️ Options
+
+- `--interface`, `-i`: Specify the AI interface to use (e.g., `groq` or `openai`).
+- `--version`, `-v`: Display the current version of Terminaider.
+
+### 🔍 Code Analysis
+
+After discussing code with the AI, any provided code analysis will be displayed and copied to your clipboard for easy access.
+
+## 🛠 Build Instructions
+
+Build Terminaider from source:
+
+### Clone the Repository
 
 ```bash
 git clone https://github.com/Danielratmiroff/terminaider.git
+```
+
+### Navigate to the Project Directory
+
+```bash
 cd terminaider
-go install
 ```
 
-3. Set up your API key:
-
-   Option 1: Set an environment variable:
-   ```bash
-   export GROQ_API_KEY="your_api_key_here"
-   ```
-
-   Option 2: Create a `config.yaml` file in the repo folder:
-   ```yaml
-   GroqAPIKey: "your_api_key_here"
-   ```
-
-## Usage
-
-### Basic Usage
+### Create a Virtual Environment (Optional but Recommended)
 
 ```bash
-terminaider
+python -m venv venv
+source venv/bin/activate  # On Windows use venv\Scripts\activate
 ```
 
-### Prompt on Startup
+### Install Dependencies
 
 ```bash
-terminaider How big is the Earth?
+pip install -r requirements.txt
 ```
 
-### Quick Command (copies executable command to clipboard)
+### Build the Package
 
 ```bash
-terminaider -r How can I commit my changes to git?
+python setup.py sdist bdist_wheel
 ```
 
----
+This will generate distribution files in the `dist/` directory.
 
-### Recommendation: Create an Alias
-
-Add this line to your shell configuration file (e.g., `~/.zshrc` or `~/.bashrc`):
+### Install the Built Package
 
 ```bash
-alias ai='terminaider'
+pip install dist/terminaider-<VERSION>-py3-none-any.whl
 ```
 
-Then reload your shell or run `source ~/.zshrc` (or respective config file).
+## 🤝 Contributing
 
-Now you can use `ai` as a shortcut:
+Contributions are welcome! Please open an issue or submit a pull request on GitHub.
 
-```bash
-ai is the earth flat?
-```
+## 📄 License
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-[MIT License](LICENSE)
+MIT License - [LICENSE](LICENSE).
