@@ -1,6 +1,7 @@
 from dataclasses import dataclass
+import json
 import logging
-from typing import List, Literal, TypedDict
+from typing import Any, Dict, List, Literal, TypedDict
 import uuid
 
 from langchain_core.messages import BaseMessage, HumanMessage
@@ -25,15 +26,28 @@ def get_chat_history(session_id: str) -> InMemoryChatMessageHistory:
     return chat_history
 
 
+@dataclass
+class UsageMetadata:
+    input_tokens: int
+    output_tokens: int
+    total_tokens: int
+
+
 @dataclass(frozen=True)
 class MessagesState(TypedDict):
     messages: List[BaseMessage]
     code_analysis: str
+    usage_metadata: UsageMetadata
 
-# Define the function that calls the model
+
+@dataclass(frozen=True)
+class AnalysisState(TypedDict):
+    messages: List[BaseMessage]
+    code_analysis: str
+    usage_metadata: UsageMetadata
 
 
-def call_model(state: MessagesState, config: RunnableConfig) -> MessagesState:
+def call_model(state: MessagesState, config: RunnableConfig) -> AnalysisState:
     # Make sure that config is populated with the session id
     logging.info(f"Config: {config}")
     if "configurable" not in config or "session_id" not in config["configurable"] or "llm_interface" not in config["configurable"]:
@@ -49,7 +63,7 @@ def call_model(state: MessagesState, config: RunnableConfig) -> MessagesState:
     response = llm.invoke(messages)
     logging.info(f"\nAI Response: {response}")
 
-    main_response, code_analysis = extract_response_parts(response.content)
+    main_response, code_analysis, token_usage = extract_response_parts(response)
 
     # Create a new message with the response content
     ai_message = type(response)(content=main_response)
@@ -59,11 +73,12 @@ def call_model(state: MessagesState, config: RunnableConfig) -> MessagesState:
 
     return {
         "messages": [ai_message],
-        "code_analysis": code_analysis
+        "code_analysis": code_analysis,
+        "usage_metadata": token_usage
     }
 
 
-def extract_response_parts(response_content: str) -> tuple:
+def extract_response_parts(response) -> tuple:
     """
     Helper function to split the response into main content and code analysis.
 
@@ -73,9 +88,25 @@ def extract_response_parts(response_content: str) -> tuple:
     Returns:
     - A tuple containing the main response and code analysis.
     """
-    content_parts = response_content.split("[CODE_ANALYSIS]")
+    message_content = response.content
+    content_parts = message_content.split("[CODE_ANALYSIS]")
+
+    # Extract the main response
     main_response = content_parts[0].strip()
     logging.info(f"Main response: {main_response}")
+    print(f"Main response: {main_response}")
+
+    # Extract the code analysis if it exists
     code_analysis = content_parts[1].strip() if len(content_parts) > 1 else "None"
     logging.info(f"Code analysis: {code_analysis}")
-    return (main_response, code_analysis)
+
+    usage_metadata = response.usage_metadata
+    logging.info(f"Usage metadata: {usage_metadata}")
+
+    token_usage = UsageMetadata(
+        input_tokens=usage_metadata["input_tokens"],
+        output_tokens=usage_metadata["output_tokens"],
+        total_tokens=usage_metadata["total_tokens"]
+    )
+
+    return (main_response, code_analysis, token_usage)

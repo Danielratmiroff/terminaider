@@ -5,7 +5,7 @@ import logging
 from typing import Callable, List, Optional, Tuple
 import uuid
 from terminaider.themes.themes import CATPUCCINO_MOCCA
-from terminaider.agent import call_model
+from terminaider.agent import UsageMetadata, call_model
 from terminaider.ai_interface import get_ai_interface
 from terminaider.utils import clean_code_block
 from terminaider.prompts import SYSTEM_PROMPT
@@ -29,8 +29,12 @@ def initialize_chat(first_call: bool, input_message: HumanMessage) -> MessagesSt
 
     return MessagesState(
         messages=messages,
-        code_analysis=""
-    )
+        code_analysis="",
+        usage_metadata=UsageMetadata(
+            input_tokens=0,
+            output_tokens=0,
+            total_tokens=0
+        ))
 
 
 def handle_code_summary(code_summary: str, console: Console) -> None:
@@ -96,12 +100,15 @@ def run_chat(
                     is_first_call = False
                     continue
 
+                print(f"event: {event}")
                 logging.debug(f"Stream Event: {event}")
 
                 latest_message = event["messages"][-1]
                 messages_context = latest_message.content
                 markdown_messages = Markdown(messages_context)
                 console.print(markdown_messages)
+
+                # print(event["usage_metadata"])
 
                 code_analysis = event.get("code_analysis")
                 if code_analysis and event["code_analysis"] != "None":
