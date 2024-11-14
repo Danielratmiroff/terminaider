@@ -8,7 +8,7 @@ Terminaider is a CLI that brings AI-powered assistance directly to your terminal
 
 Interact with an AI chat interface to get instant help, code analysis, and more — all without leaving your command line.
 
-![Demo](resources/terminaider_demo.gif)
+![Demo](https://github.com/Danielratmiroff/terminaider/blob/a8af911e61877eb7d48a7ebbefd48f1cab5b944a/img/terminaier.png)
 
 ## ✨ Features
 
