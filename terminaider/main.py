@@ -7,7 +7,7 @@ from terminaider import get_app_name, run_chat, get_package_version
 from terminaider.ai_interface import Interfaces
 from terminaider.config import ConfigManager
 
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 
 app = typer.Typer()
 
@@ -60,10 +60,10 @@ def termi(
         print(f"v{get_package_version(get_app_name())}")
         raise typer.Exit()
 
-    # run_chat(
-    #     init_prompt=prompt,
-    #     interface=interface
-    # )
+    run_chat(
+        init_prompt=prompt,
+        interface=interface
+    )
 
 
 def run():
