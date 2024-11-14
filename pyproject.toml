@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "terminaider"
-version = "0.1.0"
+version = "0.1.1"
 description = "AI assistant for your terminal"
 authors = [{ name = "Daniel Ratmiroff", email = "danielratmiroff@pm.me" }]
 readme = "README.md"
@@ -82,7 +82,7 @@ dependencies = [
     "multidict==6.1.0",
     "networkx==3.4.2",
     "nh3==0.2.18",
-    "numpy==2.1.3",
+    "numpy",
     "nvidia-cublas-cu12==12.4.5.8",
     "nvidia-cuda-cupti-cu12==12.4.127",
     "nvidia-cuda-nvrtc-cu12==12.4.127",
@@ -102,8 +102,8 @@ dependencies = [
     "pkginfo==1.10.0",
     "propcache==0.2.0",
     "pycparser==2.22",
-    "pydantic==2.9.2",
-    "pydantic_core==2.26.0",
+    "pydantic",
+    "pydantic_core",
     "PyGetWindow==0.0.9",
     "Pygments==2.18.0",
     "PyMsgBox==1.0.9",
@@ -131,24 +131,22 @@ dependencies = [
     "smmap==5.0.1",
     "sniffio==1.3.1",
     "SQLAlchemy==2.0.36",
-    "sse-starlette==2.1.3",
-    "starlette==0.41.2",
+    "sse-starlette",
+    "starlette",
     "sympy==1.13.1",
     "tenacity==9.0.0",
     "threadpoolctl==3.5.0",
     "tiktoken==0.8.0",
     "tokenizers==0.20.3",
-    "tomlkit==0.13.2",
+    "tomlkit",
     "torch==2.5.1",
     "tqdm==4.67.0",
     "transformers==4.46.2",
     "triton==3.1.0",
-    "twine==5.1.1",
-    "typer==0.13.0",
+    "typer",
     "typing_extensions==4.12.2",
     "urllib3==2.2.3",
-    "uvicorn==0.32.0",
-    "wheel==0.45.0",
+    "uvicorn",
     "yarl==1.17.1",
     "zipp==3.21.0",
 ]
