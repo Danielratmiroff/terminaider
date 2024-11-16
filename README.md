@@ -13,9 +13,9 @@ Interact with an AI chat interface to get instant help, code analysis, and more 
 ## ✨ Features
 
 - **AI Chat Interface**: Engage in conversations with an AI assistant directly from your terminal.
-- **Code Analysis**: Receive code summaries and analyses to understand and improve your code.
+- **Code Analysis**: Provides code summaries related to your inputs.
 - **Customizable Interfaces**: Choose between different AI interfaces like Groq or OpenAI.
-- **Session Management**: Maintains chat history per session for a seamless experience.
+- **Session Management**: Maintains chat history per session.
 - **Clipboard Integration**: Copy code summaries directly to your clipboard.
 
 ## 📦 Installation
