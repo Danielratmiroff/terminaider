@@ -25,7 +25,7 @@ class AIModel(BaseModel):
 
 
 groq_model = AIModel(
-    llm="llama-3.2-90b-text-preview",
+    llm="llama-3.1-70b-versatile",
     temperature=0.7,
     max_tokens=2048
 )
