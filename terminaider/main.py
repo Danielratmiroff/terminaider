@@ -1,4 +1,3 @@
-
 import logging
 from typing import Annotated, List, Optional
 from pydantic import BaseModel
@@ -23,9 +22,9 @@ def interface_callback(value: str) -> Interfaces:
 
 @app.command()
 def termi(
-    prompt: Annotated[Optional[str],
+    prompt: Annotated[List[str],
                       typer.Argument(
-                          help="The prompt to be processed by the AI chat.")] = None,
+                          help="The prompt to be processed by the AI chat.")],
     interface: Annotated[str,
                          typer.Option(
                              "--interface",
@@ -60,8 +59,11 @@ def termi(
         print(f"v{get_package_version(get_app_name())}")
         raise typer.Exit()
 
+    # Join the prompt list into a single string if not empty
+    prompt_str = " ".join(prompt) if prompt else None
+
     run_chat(
-        init_prompt=prompt,
+        init_prompt=prompt_str,
         interface=interface
     )
 
