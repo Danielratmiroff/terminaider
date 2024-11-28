@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "terminaider"
-version = "0.1.2"
+version = "0.1.3"
 description = "AI assistant for your terminal"
 authors = [{ name = "Daniel Ratmiroff", email = "danielratmiroff@pm.me" }]
 readme = "README.md"
