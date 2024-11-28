@@ -40,7 +40,7 @@ ai
 Or initiate a chat with an initial prompt:
 
 ```bash
-ai "How do I calculate Earth's roundness"
+ai How do I calculate Earth's roundness
 ```
 
 ## ⚙️ Configuration
@@ -68,7 +68,7 @@ ai
 Provide an initial prompt:
 
 ```bash
-ai "explain the why Python is great"
+ai explain the why Python is great
 ```
 
 ### ⚙️ Options

@@ -55,7 +55,7 @@ def get_ai_interface(
     match interface:
         case Interfaces.OPENAI:
             api_key = get_openai_api_key()
-            print(f"{Fore.LIGHTMAGENTA_EXb}Using OpenAI Interface{Style.RESET_ALL}\n")
+            print(f"{Fore.LIGHTMAGENTA_EX}Using OpenAI Interface{Style.RESET_ALL}\n")
 
             return ChatOpenAI(
                 model_name=openai_model.llm,
